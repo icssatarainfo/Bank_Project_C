@@ -1,6 +1,7 @@
  #include<stdio.h>
  #include<conio.h>
  #include<process.h>
+ #include<dos.h>
 //----------------------------------------------
  struct Bank
   {
@@ -11,6 +12,7 @@
   }b;
 //----------------------------------------------
  FILE *fp;
+ char fileName[]={"BankData.txt"};
 //----------------------------------------------
  void NewAccount();
  void ShowRecords();
@@ -61,6 +63,13 @@
 	  Withdrawal();
 	else if(ch==8)
 	  exit(0);
+	else
+	 {
+	  sound(290);
+	  printf("\n Wrong Choice...");
+	  delay(250);
+	  nosound();
+	 }
 	getch();
      }
   }
@@ -68,7 +77,7 @@
   int GenerateAccountNo()
    {
      int n = 0;
-     fp = fopen("bank.txt","r");
+     fp = fopen(fileName,"r");
      while( fread(&b,sizeof(b),1,fp)!=NULL)
       {
        n = b.acno;
@@ -80,7 +89,7 @@
  int CheckAccount(int x)
   {
    int flg = 0;
-   fp = fopen("bank.txt","r");
+   fp = fopen(fileName,"r");
    while( fread(&b,sizeof(b),1,fp)!=NULL)
     {
      if(b.acno==x)
@@ -103,7 +112,7 @@
    scanf("%s",&b.address);
    printf(" Enter Balance    = ");
    scanf("%f",&b.balance);
-   fp = fopen("bank.txt","ab");
+   fp = fopen(fileName,"ab");
    fwrite(&b,sizeof(b),1,fp);
    fclose(fp);
    printf("------------------------------------------");
@@ -112,7 +121,7 @@
 //----------------------------------------------------------------
  void ShowRecords()
   {
-   fp = fopen("bank.txt","rb");
+   fp = fopen(fileName,"rb");
 
    printf("\n Account No  Name    Address  Balance");
    printf("\n------------------------------------------");
@@ -135,7 +144,7 @@
      printf("\n Such Account Does Not Exist...");
      return;
     }
-   fp = fopen("bank.txt","rb");
+   fp = fopen(fileName,"rb");
    while( fread( &b, sizeof(b), 1, fp)!=NULL)
     {
       if(b.acno==n)
@@ -162,7 +171,7 @@
      printf("\n Such Account Does Not Exist...");
      return;
     }
-   fp = fopen("bank.txt","rb");
+   fp = fopen(fileName,"rb");
    fp1 = fopen("demo.txt","wb");
 
    while( fread( &b, sizeof(b), 1, fp)!=NULL)
@@ -172,8 +181,8 @@
     }
    fclose(fp);
    fclose(fp1);
-   remove("bank.txt");
-   rename("demo.txt","bank.txt");
+   remove(fileName);
+   rename("demo.txt",fileName);
    printf("\n Record Deleted Successfully...");
   }
 //----------------------------------------------------------
